@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Rose Day</title>
+    <style>
+        /* Background Styling */
+        body {
+            text-align: center;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            overflow: hidden;
+            transition: background 5s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-top: 20px;
+            animation: fadeIn 2s ease-in-out;
+            text-decoration: underline;
+        }
+
+        .rose {
+            font-size: 150px;
+            animation: bounce 2s infinite alternate, glow 1.5s infinite alternate, pulse 2s infinite ease-in-out;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            display: inline-block;
+            transform: rotate(-10deg);
+        }
+
+        .message {
+            font-size: 1.8em;
+            margin-top: 20px;
+            font-weight: bold;
+            animation: fadeIn 3s ease-in-out;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Rose Counter */
+        #rose-counter {
+            font-size: 1.5em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Falling Roses */
+        .falling-rose {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            animation: fall linear infinite;
+        }
+
+        /* Music Button */
+        .music-btn {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: white;
+            color: #ff758c;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .music-btn:hover {
+            background: #ff7eb3;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px white; }
+            100% { text-shadow: 0 0 25px white; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1) rotate(-10deg); }
+            50% { transform: scale(1.1) rotate(0deg); }
+            100% { transform: scale(1) rotate(-10deg); }
+        }
+    </style>
+</head>
+<body>
+    <button class="music-btn"><audio src="mp3.mpeg" controls autoplay>🎵 Play Music</audio></button>
+
+    <h1>Happy Rose Day! 🌹</h1>
+    <div class="rose">🌹</div>
+    <p class="message">Wishing you a day filled with love and happiness!</p>
+
+    <script>
+        let roseCount = 0;
+        let isMusicPlaying = false;
+        // let audio = new Audio('https://www.bensound.com/bensound-music/bensound-romantic.mp3');
+        let roseSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4389'); // Small pop sound
+
+        // Falling Roses Effect
+        function createFallingRose() {
+            const rose = document.createElement("div");
+            rose.classList.add("falling-rose");
+            rose.innerHTML = "🌹";
+            document.body.appendChild(rose);
+
+            rose.style.left = Math.random() * 100 + "vw";
+            rose.style.animationDuration = Math.random() * 3 + 2 + "s";
+
+            rose.onclick = function (event) {
+                rose.remove();
+                roseCount++;
+                document.getElementById("rose-counter").innerText = `Collected Roses: ${roseCount} 🌹`;
+                createFloatingHeart(event.clientX, event.clientY);
+                roseSound.play(); 
+
+                if (roseCount === 10) {
+                    createFireworks();
+                }
+
+                if (roseCount === 20) {
+                    createConfetti();
+                }
+            };
+
+            setTimeout(() => {
+                rose.remove();
+            }, 5000);
+        }
+
+        setInterval(createFallingRose, 700);
+
+        // Floating Hearts Effect
+        function createFloatingHeart(x, y) {
+            for (let i = 0; i < 3; i++) { 
+                const heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = ["💖", "💞", "❤️"][Math.floor(Math.random() * 3)];
+                heart.style.left = (x + Math.random() * 30 - 15) + "px";
+                heart.style.top = (y + Math.random() * 30 - 15) + "px";
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 2000);
+            }
+        }
+
+        // Fireworks Effect
+        function createFireworks() {
+            alert("🎆 WOW! You collected 10 roses! Enjoy the fireworks!");
+        }
+
+        // Confetti Effect
+        function createConfetti() {
+            alert("🎊 Amazing! 20 Roses Collected! Confetti Time!");
+        }
+
+        // Background Music Toggle
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                audio.pause();
+                document.querySelector(".music-btn").innerText = "🎵 Play Music";
+            } else {
+                audio.play();
+                document.querySelector(".music-btn").innerText = "🔊 Pause Music";
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Dynamic Background Animation
+        let colors = ["#ff758c", "#ff7eb3", "#ff9a9e", "#fecfef"];
+        let index = 0;
+        setInterval(() => {
+            document.body.style.background = `linear-gradient(to right, ${colors[index]}, ${colors[(index + 1) % colors.length]})`;
+            index = (index + 1) % colors.length;
+        }, 5000);
+    </script>
+</body>
+</html>
